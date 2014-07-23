@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <div class="headImg">
+            <img src="http://www.subtleheaders.com/wp-content/uploads/code-header.jpg" />
+        </div>
+        <h1>My Blog</h1>
+        @*if requested is authenticated the user is logged in*@
+        @if (Request.IsAuthenticated)
+        {
+             <div>
+                 Welcome @User.Identity.Name! @*welcome <username>*@
+                 | <a href="@Url.Action("Index", "Home")">Home</a>
+                 | <a href="@Url.Action("Index", "Post")">Account</a>
+                 | <a href="@Url.Action("Logout", "Account")">Logout</a>
+                 | <a href="@Url.Action("Index", "comments")">Comments</a>
+             </div>
+        }
+        else
+        {
+            <div>
+            <a href="@Url.Action("Login", "Account")">Log in</a>
+            | <a href="@Url.Action("Register", "Account")">Create an account</a>
+            </div>
+        }
+    </header>
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

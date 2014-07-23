@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MyBlog.Models.Post>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .bodyImg {
+        max-height: 250px;
+        max-width: 250px;
+    }
+</style>
+
+<h2>Index/Home</h2>
+
+@*if any posts in our list display them*@
+@if (Model.Any())
+{
+     foreach(var post in Model)
+     {
+         <div class="post">
+             <div class="title">
+                 <h3>@post.Title</h3>
+                 <span>By: @post.Author.Name</span>
+                 <p>Created on: @post.DateCreated.ToShortDateString()</p>
+             </div>
+             <div class="body">
+                 @*if post has an image show it*@
+                 @if (!string.IsNullOrEmpty(post.ImageURL))
+                 {
+                     <div>
+                        <img class="bodyImg" src="@post.ImageURL" />
+                     </div>
+                 }
+                 @post.Body
+             </div>
+             @*data-id holds the postID for the particular post*@
+             <div class="likes" data-id="@post.PostID">
+                 @post.Likes Likes
+             </div>
+             <div class="commentContainer">
+                 @if(post.Comments.Any()) {
+                 @*LOOP OVER AND DISPLAY COMMENTS*@
+                    foreach(var comment in post.Comments) {
+                        <div>
+                            @Html.Partial("comment", comment)
+                        </div>
+                    }
+                 } else {
+                     <div>No comments.</div>
+                 }
+                 <div class="addComment">
+                     @*passing in a new blank comment object, with the post ID set*@
+                     @Html.Partial("addComment", new MyBlog.Models.Comment() { PostID = post.PostID })
+                 </div>
+             </div>
+         </div>
+     }
+}
+else
+{
+    <div>No posts yet!</div>
+}
